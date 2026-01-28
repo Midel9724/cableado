@@ -1,36 +1,50 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>cableado</title>
+  <title>Cable Happy </title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-    <div class="container">
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h2>CABLEHAPPY</h2>
-            </div>
-            <ul id="menu-comandos">
-                </ul>
-        </aside>
-        <main class="main-content">
-            <div id="welcome-screen" class="view">
-                <h1>menu</h1>
-                <p>bienvenido</p>
-                <div class="git-icon-placeholder">menu</div>
-            </div>
+    <header>
+        <h1 id="company-name">Cargando...</h1>
+        <h3 id="company-slogan"></h3>
+        <p id="company-desc"></p>
+    </header>
 
-            <div id="detail-screen" class="view hidden">
-                <header class="content-header">
-                    <h2 id="display-titulo"></h2>
-                </header>
-            </div>
-        </main>
-    </div>
+    <section>
+        <h2>Nuestras Soluciones</h2>
+        <p>Elige un servicio para enviarnos una solicitud de cotización automáticamente.</p>
+
+        <div id="servicios-container"></div>
+    </section>
+
+    <section class="contacto-section">
+        <h2>Contáctanos</h2>
+
+        <div class="info-contacto">
+            <p>
+                <i class="fas fa-phone"></i>
+                <span id="contact-tel"></span>
+            </p>
+            <p>
+                <i class="fas fa-envelope"></i>
+                <span id="contact-email"></span>
+            </p>
+            <p>
+                <i class="fas fa-map-marker-alt"></i>
+                <span id="contact-dir"></span>
+            </p>
+        </div>
+
+        <a id="btn-contacto-general" href="#">Consulta General por Correo</a>
+    </section>
+
+    <footer>
+        <p>&copy; Cable Happy - Soluciones de Conectividad</p>
+    </footer>
 
     <script src="logica.js"></script>
+
 </body>
 </html>

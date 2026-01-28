@@ -1,0 +1,92 @@
+/* --- ESTILO GENERAL ELEGANTE --- */
+body {
+    font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+    background-color: #f8f9fa; /* Gris muy pálido de fondo */
+    color: #4a4a4a;            /* Texto gris oscuro (no negro puro) para suavidad */
+    margin: 0;
+    padding: 40px 20px;
+    text-align: center;        /* Todo centrado */
+}
+
+/* --- CONTENEDORES FLOTANTES (EFECTO PAPEL) --- */
+header, section, footer {
+    max-width: 800px;          /* Ancho limitado para lectura cómoda */
+    margin: 0 auto 30px;       /* Centrado horizontal automático */
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 8px;        /* Bordes suavemente redondeados */
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03); /* Sombra difusa y sutil */
+}
+
+/* --- TIPOGRAFÍA --- */
+h1 {
+    color: #2c3e50;            /* Azul marino oscuro (Navy) */
+    font-weight: 300;          /* Letra fina y elegante */
+    letter-spacing: 2px;       /* Espaciado entre letras */
+    text-transform: uppercase;
+}
+
+h2 {
+    color: #34495e;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+/* --- TARJETAS DE SERVICIOS --- */
+#servicios-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.servicio-card {
+    background-color: #fff;
+    border: 1px solid #eee;    /* Borde casi invisible */
+    padding: 25px;
+    width: 220px;
+    border-radius: 6px;
+    transition: transform 0.3s ease;
+}
+
+.servicio-card:hover {
+    transform: translateY(-5px); /* Pequeña elevación al pasar el mouse */
+    border-color: #dcdcdc;
+}
+
+.servicio-card i {
+    color: #7f8c8d;            /* Iconos en gris metálico */
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+/* --- BOTONES SOFISTICADOS --- */
+button, #btn-contacto-general {
+    background-color: #2c3e50; /* Fondo oscuro sobrio */
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 4px;        /* Bordes poco redondeados (más serio) */
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+    transition: background 0.3s;
+    display: inline-block;
+}
+
+button:hover, #btn-contacto-general:hover {
+    background-color: #1a252f; /* Un poco más oscuro al pasar el mouse */
+}
+
+/* --- CONTACTO --- */
+.info-contacto p {
+    margin: 10px 0;
+    font-size: 1.05rem;
+}
+.info-contacto i {
+    color: #2c3e50;
+    margin-right: 8px;
+}
+
+hr { display: none; } /* Ocultamos las líneas feas del HTML original */

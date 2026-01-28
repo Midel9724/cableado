@@ -35,9 +35,9 @@ const db = {
         }
     ],
     contacto: {
-        telefono: "+52 55 1234 5678",
-        whatsapp: "5512345678", // Solo números para el link
-        email: "contacto@connectcablepro.com",
+        telefono: "+52 55 8240 3218",
+        whatsapp: "5582403218", // Solo números para el link
+        email: "CableadoHappy@outlook.com",
         direccion: "Av. Tecnológica 123, Ciudad de México",
         horario: "Lunes a Viernes: 9:00 AM - 6:00 PM"
     }

@@ -1,116 +1,123 @@
 /**
- * SIMULACIÓN DE BASE DE DATOS (MOCK DATA)
- * Aquí es donde cambias la información de tu empresa.
+ * --- BASE DE DATOS (Simulada) ---
+ * Aquí cambias la información de tu negocio.
  */
 const db = {
     empresa: {
-        nombre: "ConnectCable Pro",
-        slogan: "Soluciones de conectividad y cableado estructurado",
-        descripcion: "Somos expertos en infraestructura de redes, ofreciendo instalaciones certificadas de voz, datos y fibra óptica para oficinas y edificios industriales."
+        nombre: "Cable Happy",
+        slogan: "Conectividad feliz y sin enredos",
+        descripcion: "Especialistas en cableado estructurado, fibra óptica y soluciones de red para hogares y empresas."
     },
     servicios: [
         {
-            id: 1,
             titulo: "Cableado Estructurado",
-            icono: "fa-network-wired", // Clase de FontAwesome (opcional)
-            descripcion: "Instalación y certificación de nodos de red en Categorías 5e, 6 y 6A. Organización de Racks y Gabinetes."
+            icono: "fa-network-wired",
+            descripcion: "Instalación de nodos de red Cat 5e, 6 y 6A certificados."
         },
         {
-            id: 2,
             titulo: "Fibra Óptica",
             icono: "fa-project-diagram",
-            descripcion: "Empalmes por fusión, certificación OTDR y tendido de fibra monomodo y multimodo para enlaces de larga distancia."
+            descripcion: "Empalmes por fusión y tendido de fibra para alta velocidad."
         },
         {
-            id: 3,
-            titulo: "Sistemas de CCTV",
+            titulo: "Cámaras CCTV",
             icono: "fa-video",
-            descripcion: "Instalación de cámaras de seguridad IP y análogas, configuración de DVR/NVR y visualización remota."
+            descripcion: "Instalación y configuración de sistemas de videovigilancia."
         },
         {
-            id: 4,
-            titulo: "Mantenimiento de Redes",
-            icono: "fa-tools",
-            descripcion: "Diagnóstico de fallas, peinado de cables en sites de comunicaciones y reordenamiento de infraestructura."
+            titulo: "Mantenimiento de Racks",
+            icono: "fa-server",
+            descripcion: "Organización (peinado) de cables y limpieza de sites."
         }
     ],
     contacto: {
         telefono: "+52 55 1234 5678",
-        whatsapp: "5512345678", // Solo números para el link
-        email: "contacto@connectcablepro.com",
-        direccion: "Av. Tecnológica 123, Ciudad de México",
-        horario: "Lunes a Viernes: 9:00 AM - 6:00 PM"
+        email: "cablehappy@gmail.com", // Tu correo real
+        direccion: "Ciudad de México",
     }
 };
 
 /**
- * LÓGICA DE RENDERIZADO (CONTROLADOR)
- * Estas funciones toman los datos de arriba y los pintan en el HTML.
+ * --- CONTROLADOR (Lógica) ---
  */
 
-// 1. Cargar información del encabezado y descripción
+// 1. Cargar Textos Principales
 function cargarInfoEmpresa() {
-    const titulo = document.getElementById('company-name');
-    const slogan = document.getElementById('company-slogan');
-    const desc = document.getElementById('company-desc');
-
-    if(titulo) titulo.textContent = db.empresa.nombre;
-    if(slogan) slogan.textContent = db.empresa.slogan;
-    if(desc) desc.textContent = db.empresa.descripcion;
+    document.getElementById('company-name').textContent = db.empresa.nombre;
+    document.getElementById('company-slogan').textContent = db.empresa.slogan;
+    document.getElementById('company-desc').textContent = db.empresa.descripcion;
 }
 
-// 2. Cargar la lista de servicios dinámicamente
+// 2. Cargar Servicios con Botón de Correo Configurado
 function cargarServicios() {
     const contenedor = document.getElementById('servicios-container');
-    
-    if (!contenedor) return; // Si no existe el contenedor, no hacemos nada
-
-    contenedor.innerHTML = ''; // Limpiar contenido previo
+    contenedor.innerHTML = '';
 
     db.servicios.forEach(servicio => {
-        // Creamos una tarjeta (card) para cada servicio
-        const card = document.createElement('div');
-        card.className = 'servicio-card';
+        // Creamos el elemento visual (Tarjeta simple)
+        const div = document.createElement('div');
         
-        card.innerHTML = `
-            <div class="icono"><i class="fas ${servicio.icono}"></i></div>
+        // Un poco de estilo directo desde JS para que se vea ordenado sin CSS externo
+        div.style.border = "1px solid #ddd";
+        div.style.padding = "15px";
+        div.style.width = "250px";
+        div.style.textAlign = "center";
+        div.style.borderRadius = "8px";
+
+        div.innerHTML = `
+            <div style="font-size: 40px; color: #007bff; margin-bottom:10px;">
+                <i class="fas ${servicio.icono}"></i>
+            </div>
             <h3>${servicio.titulo}</h3>
             <p>${servicio.descripcion}</p>
-            <button onclick="solicitarCotizacion('${servicio.titulo}')">Cotizar</button>
+            <button onclick="solicitarCotizacion('${servicio.titulo}')" style="cursor:pointer; padding:5px 10px;">
+                Cotizar este servicio
+            </button>
         `;
-        
-        contenedor.appendChild(card);
+        contenedor.appendChild(div);
     });
 }
 
-// 3. Cargar información de contacto
+// 3. Cargar Datos de Contacto y Botón General
 function cargarContacto() {
-    const telElem = document.getElementById('contact-tel');
-    const emailElem = document.getElementById('contact-email');
-    const dirElem = document.getElementById('contact-dir');
-    const btnWsp = document.getElementById('btn-whatsapp');
+    document.getElementById('contact-tel').textContent = db.contacto.telefono;
+    document.getElementById('contact-email').textContent = db.contacto.email;
+    document.getElementById('contact-dir').textContent = db.contacto.direccion;
 
-    // Asignar textos
-    if(telElem) telElem.textContent = db.contacto.telefono;
-    if(emailElem) emailElem.textContent = db.contacto.email;
-    if(dirElem) dirElem.textContent = db.contacto.direccion;
+    // Configurar botón de contacto general
+    const btnGeneral = document.getElementById('btn-contacto-general');
+    
+    const asunto = "Hola Cable Happy, tengo una duda";
+    const cuerpo = "Hola equipo de Cable Happy,\n\nVisité su página web y me gustaría saber más información general sobre sus servicios.\n\nQuedo a la espera de su respuesta.\nSaludos.";
 
-    // Asignar enlace de WhatsApp
-    if(btnWsp) {
-        btnWsp.href = `https://wa.me/${db.contacto.whatsapp}?text=Hola, me interesa cotizar un servicio de cableado.`;
-    }
+    btnGeneral.href = `mailto:${db.contacto.email}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
 }
 
-// 4. Función de utilidad para el botón "Cotizar"
-function solicitarCotizacion(nombreServicio) {
-    alert(`Te redirigiremos a WhatsApp para cotizar: ${nombreServicio}`);
-    window.location.href = `https://wa.me/${db.contacto.whatsapp}?text=Hola, me interesa información sobre el servicio de: ${nombreServicio}`;
+// 4. FUNCIÓN CLAVE: Generar el correo de cotización
+function solicitarCotizacion(servicio) {
+    const emailDestino = db.contacto.email;
+    
+    // Asunto del correo pre-llenado
+    const asunto = `Cotización urgente: ${servicio}`;
+    
+    // Cuerpo del correo (La "bienvenida" o introducción que envía el cliente)
+    const cuerpo = `Hola equipo de Cable Happy,
+
+Estoy interesado en contratar el servicio de: ${servicio}.
+
+Por favor, envíenme una cotización o contáctenme para agendar una visita técnica.
+
+Mis datos de contacto son:
+- Nombre: 
+- Teléfono: 
+
+¡Gracias!`;
+
+    // Abrir la app de correo del usuario
+    window.location.href = `mailto:${emailDestino}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
 }
 
-/**
- * INICIALIZACIÓN
- * Ejecutar las funciones cuando el documento HTML esté listo.
- */
+// Inicializar cuando carga la página
 document.addEventListener('DOMContentLoaded', () => {
     cargarInfoEmpresa();
     cargarServicios();

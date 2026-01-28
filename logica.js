@@ -1,3 +1,6 @@
+/**
+ * BASE DE DATOS
+ */
 const db = {
     empresa: {
         nombre: "Cable Happy",
@@ -21,41 +24,41 @@ const db = {
             descripcion: "Instalación y configuración de sistemas de videovigilancia."
         },
         {
-            titulo: "Mantenimiento de Racks",
+            titulo: "Mantenimiento de Sites",
             icono: "fa-server",
-            descripcion: "Organización (peinado) de cables y limpieza de sites."
+            descripcion: "Organización (peinado) de cables y limpieza de Racks."
         }
     ],
     contacto: {
         telefono: "+52 55 1234 5678",
         email: "CableadoHappy@outlook.com", 
-        direccion: "Estado de México",
+        direccion: "Ciudad de México y Área Metropolitana",
     }
 };
 
-// 1. Cargar Textos Principales
+/**
+ * LÓGICA DE LA PÁGINA
+ */
+
 function cargarInfoEmpresa() {
     const nombre = document.getElementById('company-name');
     const slogan = document.getElementById('company-slogan');
     const desc = document.getElementById('company-desc');
-    
+
     if(nombre) nombre.textContent = db.empresa.nombre;
     if(slogan) slogan.textContent = db.empresa.slogan;
     if(desc) desc.textContent = db.empresa.descripcion;
 }
 
-// 2. Cargar Servicios (Usando el diseño CSS elegante)
 function cargarServicios() {
     const contenedor = document.getElementById('servicios-container');
-    if(!contenedor) return;
+    if (!contenedor) return;
 
     contenedor.innerHTML = '';
 
     db.servicios.forEach(servicio => {
         const card = document.createElement('div');
-        
-        // Asignamos la clase del CSS para que se vea bonito y centrado
-        card.className = 'servicio-card'; 
+        card.className = 'servicio-card'; // Usa el diseño CSS
 
         card.innerHTML = `
             <div class="icono">
@@ -63,7 +66,7 @@ function cargarServicios() {
             </div>
             <h3>${servicio.titulo}</h3>
             <p>${servicio.descripcion}</p>
-            <button onclick="solicitarCotizacion('${servicio.titulo}')">
+            <button onclick="pedirDatosYCotizar('${servicio.titulo}')">
                 Cotizar ahora
             </button>
         `;
@@ -71,7 +74,6 @@ function cargarServicios() {
     });
 }
 
-// 3. Cargar Datos de Contacto
 function cargarContacto() {
     const tel = document.getElementById('contact-tel');
     const email = document.getElementById('contact-email');
@@ -82,40 +84,63 @@ function cargarContacto() {
     if(email) email.textContent = db.contacto.email;
     if(dir) dir.textContent = db.contacto.direccion;
 
-    // Configurar botón de contacto general
     if(btnGeneral) {
-        const asunto = "Consulta General - Cable Happy";
-        const cuerpo = "Hola equipo,\n\nQuisiera más información sobre sus servicios.\n\nGracias.";
-        btnGeneral.href = `mailto:${db.contacto.email}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
+        // En el botón general también pediremos datos antes
+        btnGeneral.onclick = function(e) {
+            e.preventDefault(); // Evita el link normal
+            pedirDatosYCotizar("Consulta General");
+        };
     }
 }
 
-// 4. FUNCIÓN CLAVE: Prepara el correo del cliente
-function solicitarCotizacion(servicio) {
+// --- NUEVA LÓGICA: PEDIR DATOS AL USUARIO ---
+
+function pedirDatosYCotizar(servicio) {
+    // 1. Pedimos el nombre
+    let nombreUsuario = prompt("Por favor, escribe tu NOMBRE completo:");
+    if (!nombreUsuario) return; // Si cancela, no hacemos nada
+
+    // 2. Pedimos el correo (Obligatorio)
+    let correoUsuario = prompt("Escribe tu CORREO ELECTRÓNICO para responderte:");
+    if (!correoUsuario) {
+        alert("El correo es necesario para poder enviarte la cotización.");
+        return;
+    }
+
+    // 3. Pedimos teléfono (Opcional)
+    let telefonoUsuario = prompt("Escribe tu TELÉFONO (Opcional):");
+    if (!telefonoUsuario) telefonoUsuario = "No especificado";
+
+    // 4. Armamos el correo con los datos capturados
+    enviarCorreo(servicio, nombreUsuario, correoUsuario, telefonoUsuario);
+}
+
+function enviarCorreo(servicio, nombre, correoCliente, telefono) {
     const emailDestino = db.contacto.email;
-    const asunto = `Solicitud de Cotización: ${servicio}`;
     
-    // Este es el texto que le aparecerá al cliente listo para enviar
+    // Asunto: Incluye el nombre del cliente para identificarlo rápido
+    const asunto = `Cotización para ${nombre} - Servicio: ${servicio}`;
+    
+    // Cuerpo del mensaje: Pone los datos que el usuario escribió
     const cuerpo = `Hola equipo de Cable Happy,
 
-Estoy interesado en el servicio de: ${servicio}.
+Solicito información sobre el servicio de: ${servicio}.
 
-Por favor, envíenme una propuesta o contáctenme.
+MIS DATOS DE CONTACTO:
+---------------------------------------------
+Nombre: ${nombre}
+Correo para respuesta: ${correoCliente}
+Teléfono: ${telefono}
+---------------------------------------------
 
-Mis datos son:
-- Nombre: (Escriba su nombre aquí)
-- Teléfono: (Escriba su teléfono aquí)
-- Dirección aproximada: (Opcional)
+Quedo a la espera de su respuesta automática o de un asesor.
 
-Quedo a la espera de su respuesta automática con más información.
+Gracias.`;
 
-Saludos.`;
-
-    // Abrir cliente de correo
+    // Abrimos el cliente de correo
     window.location.href = `mailto:${emailDestino}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
 }
 
-// Inicializar
 document.addEventListener('DOMContentLoaded', () => {
     cargarInfoEmpresa();
     cargarServicios();

@@ -5,7 +5,7 @@ const db = {
     empresa: {
         nombre: "Cable Happy",
         slogan: "Conectividad feliz y sin enredos",
-        descripcion: "Especialistas en cableado estructurado, fibra óptica y soluciones de red para hogares y empresas."
+        descripcion: "Especialistas en cableado estructurado, fibra óptica y soluciones de red."
     },
     servicios: [
         {
@@ -16,35 +16,34 @@ const db = {
         {
             titulo: "Fibra Óptica",
             icono: "fa-project-diagram",
-            descripcion: "Empalmes por fusión y tendido de fibra para alta velocidad."
+            descripcion: "Empalmes por fusión y tendido de fibra."
         },
         {
             titulo: "Cámaras CCTV",
             icono: "fa-video",
-            descripcion: "Instalación y configuración de sistemas de videovigilancia."
+            descripcion: "Instalación y configuración de videovigilancia."
         },
         {
-            titulo: "Mantenimiento de Sites",
+            titulo: "Mantenimiento",
             icono: "fa-server",
-            descripcion: "Organización (peinado) de cables y limpieza de Racks."
+            descripcion: "Organización de cables y limpieza de Racks."
         }
     ],
     contacto: {
         telefono: "+52 55 1234 5678",
+        // TU CORREO DE OUTLOOK DONDE RECIBIRÁS LOS MENSAJES:
         email: "CableadoHappy@outlook.com", 
-        direccion: "Ciudad de México y Área Metropolitana",
+        direccion: "Ciudad de México",
     }
 };
 
 /**
- * LÓGICA DE LA PÁGINA
+ * LÓGICA DE VISUALIZACIÓN
  */
-
 function cargarInfoEmpresa() {
     const nombre = document.getElementById('company-name');
     const slogan = document.getElementById('company-slogan');
     const desc = document.getElementById('company-desc');
-
     if(nombre) nombre.textContent = db.empresa.nombre;
     if(slogan) slogan.textContent = db.empresa.slogan;
     if(desc) desc.textContent = db.empresa.descripcion;
@@ -53,22 +52,16 @@ function cargarInfoEmpresa() {
 function cargarServicios() {
     const contenedor = document.getElementById('servicios-container');
     if (!contenedor) return;
-
     contenedor.innerHTML = '';
 
     db.servicios.forEach(servicio => {
         const card = document.createElement('div');
-        card.className = 'servicio-card'; // Usa el diseño CSS
-
+        card.className = 'servicio-card';
         card.innerHTML = `
-            <div class="icono">
-                <i class="fas ${servicio.icono}"></i>
-            </div>
+            <div class="icono"><i class="fas ${servicio.icono}"></i></div>
             <h3>${servicio.titulo}</h3>
             <p>${servicio.descripcion}</p>
-            <button onclick="pedirDatosYCotizar('${servicio.titulo}')">
-                Cotizar ahora
-            </button>
+            <button onclick="pedirDatosYCotizar('${servicio.titulo}')">Cotizar ahora</button>
         `;
         contenedor.appendChild(card);
     });
@@ -85,60 +78,68 @@ function cargarContacto() {
     if(dir) dir.textContent = db.contacto.direccion;
 
     if(btnGeneral) {
-        // En el botón general también pediremos datos antes
         btnGeneral.onclick = function(e) {
-            e.preventDefault(); // Evita el link normal
+            e.preventDefault();
             pedirDatosYCotizar("Consulta General");
         };
     }
 }
 
-// --- NUEVA LÓGICA: PEDIR DATOS AL USUARIO ---
+// --- LÓGICA WEBMAIL (ABRIR NAVEGADOR) ---
 
 function pedirDatosYCotizar(servicio) {
-    // 1. Pedimos el nombre
-    let nombreUsuario = prompt("Por favor, escribe tu NOMBRE completo:");
-    if (!nombreUsuario) return; // Si cancela, no hacemos nada
+    let nombreUsuario = prompt("1. Escribe tu NOMBRE:");
+    if (!nombreUsuario) return; 
 
-    // 2. Pedimos el correo (Obligatorio)
-    let correoUsuario = prompt("Escribe tu CORREO ELECTRÓNICO para responderte:");
-    if (!correoUsuario) {
-        alert("El correo es necesario para poder enviarte la cotización.");
-        return;
-    }
+    // Convertimos a minúsculas para detectar fácil si es gmail o outlook
+    let correoUsuario = prompt("2. Escribe tu CORREO (Gmail, Outlook, Hotmail):");
+    if (!correoUsuario) return;
+    correoUsuario = correoUsuario.toLowerCase().trim();
 
-    // 3. Pedimos teléfono (Opcional)
-    let telefonoUsuario = prompt("Escribe tu TELÉFONO (Opcional):");
+    let telefonoUsuario = prompt("3. Tu TELÉFONO (Opcional):");
     if (!telefonoUsuario) telefonoUsuario = "No especificado";
 
-    // 4. Armamos el correo con los datos capturados
-    enviarCorreo(servicio, nombreUsuario, correoUsuario, telefonoUsuario);
+    abrirWebmail(servicio, nombreUsuario, correoUsuario, telefonoUsuario);
 }
 
-function enviarCorreo(servicio, nombre, correoCliente, telefono) {
+function abrirWebmail(servicio, nombre, correoCliente, telefono) {
     const emailDestino = db.contacto.email;
+    const asunto = `Cotización: ${servicio} - Cliente: ${nombre}`;
     
-    // Asunto: Incluye el nombre del cliente para identificarlo rápido
-    const asunto = `Cotización para ${nombre} - Servicio: ${servicio}`;
-    
-    // Cuerpo del mensaje: Pone los datos que el usuario escribió
-    const cuerpo = `Hola equipo de Cable Happy,
+    // Texto del mensaje
+    // Usamos encodeURIComponent para que los espacios y saltos de linea funcionen en la URL
+    const mensajeBase = `Hola Cable Happy,
+Me interesa el servicio: ${servicio}.
 
-Solicito información sobre el servicio de: ${servicio}.
-
-MIS DATOS DE CONTACTO:
----------------------------------------------
+MIS DATOS:
 Nombre: ${nombre}
-Correo para respuesta: ${correoCliente}
+Correo: ${correoCliente}
 Teléfono: ${telefono}
----------------------------------------------
 
-Quedo a la espera de su respuesta automática o de un asesor.
+Espero su respuesta.`;
 
-Gracias.`;
+    let urlFinal = "";
 
-    // Abrimos el cliente de correo
-    window.location.href = `mailto:${emailDestino}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
+    // DETECCIÓN INTELIGENTE:
+    if (correoCliente.includes("@gmail.com")) {
+        // Enlace especial para GMAIL WEB
+        urlFinal = `https://mail.google.com/mail/?view=cm&fs=1&to=${emailDestino}&su=${encodeURIComponent(asunto)}&body=${encodeURIComponent(mensajeBase)}`;
+    } 
+    else if (correoCliente.includes("@outlook") || correoCliente.includes("@hotmail") || correoCliente.includes("@live")) {
+        // Enlace especial para OUTLOOK WEB
+        urlFinal = `https://outlook.live.com/mail/0/deeplink/compose?to=${emailDestino}&subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(mensajeBase)}`;
+    } 
+    else if (correoCliente.includes("@yahoo")) {
+        // Enlace especial para YAHOO WEB
+        urlFinal = `https://compose.mail.yahoo.com/?to=${emailDestino}&subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(mensajeBase)}`;
+    }
+    else {
+        // Si es un correo empresarial o raro, usamos el método clásico
+        urlFinal = `mailto:${emailDestino}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(mensajeBase)}`;
+    }
+
+    // Abrir en una PESTAÑA NUEVA
+    window.open(urlFinal, '_blank');
 }
 
 document.addEventListener('DOMContentLoaded', () => {

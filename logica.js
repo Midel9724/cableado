@@ -7,6 +7,28 @@ const db = {
         slogan: "Conectividad feliz y sin enredos",
         descripcion: "Especialistas en cableado estructurado, fibra óptica y soluciones de red."
     },
+    proyectos: [
+        {
+            titulo: "Instalación de Cableado en Oficinas",
+            imagen: "img/pelado1.jpg",
+            descripcion: "Implementación de red estructurada Cat 6 para 20 estaciones de trabajo, garantizando velocidad y estabilidad."
+        },
+        {
+            titulo: "Organización de Rack Empresarial",
+            imagen: "img/pelado2.jpg",
+            descripcion: "Optimización y etiquetado de cables en rack para mejorar mantenimiento y ventilación."
+        },
+        {
+            titulo: "Instalación de CCTV en Negocio",
+            imagen: "img/pelado3.jpg",
+            descripcion: "Configuración de sistema de videovigilancia con acceso remoto y grabación 24/7."
+        },
+        {
+            titulo: "Tendido de Fibra Óptica",
+            imagen: "img/pelado4.jpg",
+            descripcion: "Empalme por fusión e instalación de fibra óptica para enlace de alta velocidad."
+        }
+    ],
     servicios: [
         {
             titulo: "Cableado Estructurado",
@@ -56,20 +78,59 @@ function cargarInfoEmpresa() {
 function cargarServicios() {
     const contenedor = document.getElementById('servicios-container');
     if (!contenedor) return;
+
     contenedor.innerHTML = '';
 
     db.servicios.forEach(servicio => {
         const card = document.createElement('div');
-        card.className = 'servicio-card';
-        card.innerHTML = `
-            <div class="icono"><i class="fas ${servicio.icono}"></i></div>
-            <h3>${servicio.titulo}</h3>
-            <p>${servicio.descripcion}</p>
-            <button onclick="irAFormulario('${servicio.titulo}')">Cotizar ahora</button>
-        `;
+        card.classList.add('servicio-card');
+
+        const icono = document.createElement('div');
+        icono.classList.add('icono');
+        icono.innerHTML = `<i class="fas ${servicio.icono}"></i>`;
+
+        const titulo = document.createElement('h3');
+        titulo.textContent = servicio.titulo;
+
+        const descripcion = document.createElement('p');
+        descripcion.textContent = servicio.descripcion;
+
+        const boton = document.createElement('button');
+        boton.textContent = "Cotizar ahora";
+        boton.addEventListener('click', () => {
+            irAFormulario(servicio.titulo);
+        });
+
+        card.appendChild(icono);
+        card.appendChild(titulo);
+        card.appendChild(descripcion);
+        card.appendChild(boton);
+
         contenedor.appendChild(card);
     });
 }
+
+function cargarProyectos() {
+    const contenedor = document.getElementById('proyectos-container');
+    if (!contenedor) return;
+
+    contenedor.innerHTML = '';
+
+    db.proyectos.forEach(proyecto => {
+        const card = document.createElement('div');
+        card.classList.add('proyecto-card');
+
+        card.innerHTML = `
+            <img src="${proyecto.imagen}" alt="${proyecto.titulo}">
+            <h4>${proyecto.titulo}</h4>
+            <p>${proyecto.descripcion}</p>
+        `;
+
+        contenedor.appendChild(card);
+    });
+}
+
+
 
 function cargarContacto() {
     const tel = document.getElementById('contact-tel');
@@ -187,6 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cargarInfoEmpresa();
     cargarServicios();
     cargarContacto();
+    cargarProyectos();
     activarMenuContacto();
     activarFormulario();
 });

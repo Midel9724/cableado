@@ -113,16 +113,16 @@ h2 {
     justify-content: center;
     gap: 25px;
 }
-/* --- ESTILOS PARA LISTAS --- */
-ul {
-    list-style: none;          /* Quita los puntos por defecto */
+/* --- ESTILOS PARA LISTAS (EXCLUYE NAV) --- */
+section ul {
+    list-style: none;
     padding: 0;
     margin: 20px auto;
     max-width: 700px;
     text-align: left;
 }
 
-ul li {
+section ul li {
     background: #f8f9fa;
     margin-bottom: 10px;
     padding: 12px 15px;
@@ -134,7 +134,7 @@ ul li {
     transition: transform 0.2s ease, background 0.2s ease;
 }
 
-ul li:hover {
+section ul li:hover {
     background: #eef1f4;
     transform: translateX(5px);
 }

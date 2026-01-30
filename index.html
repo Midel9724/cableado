@@ -1,43 +1,109 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <title>Cable Happy </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cable Happy - Soluciones de Conectividad</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-    <header>
+    <nav class="navbar">
+        <div class="logo">Cable Happy</div>
+        <ul class="menu">
+            <li><a href="#presentacion">Inicio</a></li>
+            <li><a href="#nosotros">Nosotros</a></li>
+            <li><a href="#proyectos">Proyectos</a></li>
+            <li><a href="#servicios-container">Servicios</a></li>
+            <li><a href="#" id="menu-contactarnos" class="btn-contacto">Contactarnos</a></li>
+        </ul>
+    </nav>
+
+    <header id="presentacion">
         <h1 id="company-name">Cargando...</h1>
         <h3 id="company-slogan"></h3>
         <p id="company-desc"></p>
+        <button onclick="document.getElementById('servicios-container').scrollIntoView({behavior: 'smooth'})">
+            Ver Soluciones
+        </button>
     </header>
+
+    <section id="nosotros">
+        <h2>Sobre Nosotros</h2>
+        <p style="max-width: 700px; font-size: 1.1rem; line-height: 1.6;">
+            En <strong>Cable Happy</strong> nos dedicamos a eliminar el caos de los cables. 
+            Nuestra misión es brindar conectividad estable, estética y funcional para hogares y oficinas.
+            Contamos con años de experiencia certificada en infraestructura de redes.
+        </p>
+    </section>
+
+    <section id="proyectos">
+        <h2>Nuestros Proyectos</h2>
+        <p>Galería de instalaciones recientes y casos de éxito.</p>
+        <div style="font-size: 4rem; color: #ddd;">
+            <i class="fas fa-images"></i>
+        </div>
+        <p style="color: #999;">(Próximamente imágenes reales)</p>
+    </section>
 
     <section>
         <h2>Nuestras Soluciones</h2>
-        <p>Elige un servicio para enviarnos una solicitud de cotización automáticamente.</p>
-
+        <p>Elige un servicio para cotizar.</p>
         <div id="servicios-container"></div>
     </section>
 
-    <section class="contacto-section">
+    <section id="contactarnos" class="contacto-section">
         <h2>Contáctanos</h2>
+        
+        <div class="contenedor-contacto-grid">
+            
+            <div class="info-lateral">
+                <h3>Información Directa</h3>
+                <p>Estamos listos para atender tu solicitud.</p>
+                
+                <div class="info-item">
+                    <i class="fas fa-phone"></i> <span id="contact-tel"></span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-envelope"></i> <span id="contact-email"></span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i> <span id="contact-dir"></span>
+                </div>
+            </div>
 
-        <div class="info-contacto">
-            <p>
-                <i class="fas fa-phone"></i>
-                <span id="contact-tel"></span>
-            </p>
-            <p>
-                <i class="fas fa-envelope"></i>
-                <span id="contact-email"></span>
-            </p>
-            <p>
-                <i class="fas fa-map-marker-alt"></i>
-                <span id="contact-dir"></span>
-            </p>
+            <div class="formulario-container">
+                <h3>Redactar Mensaje</h3>
+                <form id="form-contacto">
+                    <input type="hidden" id="input-servicio" value="Consulta General">
+
+                    <div class="grupo-input">
+                        <label>Tu Nombre:</label>
+                        <input type="text" id="input-nombre" placeholder="Ej. Juan Pérez" required>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label>Tu Correo:</label>
+                        <input type="email" id="input-email" placeholder="nombre@correo.com" required>
+                    </div>
+
+                    <div class="grupo-input">
+                        <label>Teléfono (Opcional):</label>
+                        <input type="tel" id="input-tel" placeholder="55 1234 5678">
+                    </div>
+
+                    <div class="grupo-input">
+                        <label>Mensaje / Asunto:</label>
+                        <textarea id="input-mensaje" rows="5" placeholder="Escribe aquí tus dudas..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-enviar-form">
+                        <i class="fas fa-paper-plane"></i> Preparar Correo
+                    </button>
+                </form>
+            </div>
         </div>
-
-        <a id="btn-contacto-general" href="#">Consulta General por Correo</a>
     </section>
 
     <footer>
@@ -45,6 +111,5 @@
     </footer>
 
     <script src="logica.js"></script>
-
 </body>
 </html>

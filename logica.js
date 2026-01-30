@@ -1,5 +1,5 @@
 /**
- * BASE DE DATOS
+ * --- BASE DE DATOS ---
  */
 const db = {
     empresa: {
@@ -42,7 +42,7 @@ const db = {
 };
 
 /**
- * LÓGICA DE VISUALIZACIÓN
+ * --- CARGA DE DATOS EN PANTALLA ---
  */
 function cargarInfoEmpresa() {
     const nombre = document.getElementById('company-name');
@@ -65,7 +65,7 @@ function cargarServicios() {
             <div class="icono"><i class="fas ${servicio.icono}"></i></div>
             <h3>${servicio.titulo}</h3>
             <p>${servicio.descripcion}</p>
-            <button onclick="pedirDatosYCotizar('${servicio.titulo}')">Cotizar ahora</button>
+            <button onclick="irAFormulario('${servicio.titulo}')">Cotizar ahora</button>
         `;
         contenedor.appendChild(card);
     });
@@ -75,79 +75,118 @@ function cargarContacto() {
     const tel = document.getElementById('contact-tel');
     const email = document.getElementById('contact-email');
     const dir = document.getElementById('contact-dir');
-    const btnGeneral = document.getElementById('btn-contacto-general');
 
     if(tel) tel.textContent = db.contacto.telefono;
     if(email) email.textContent = db.contacto.email;
     if(dir) dir.textContent = db.contacto.direccion;
+}
 
-    if(btnGeneral) {
-        btnGeneral.onclick = function(e) {
-            e.preventDefault();
-            pedirDatosYCotizar("Consulta General");
-        };
+/**
+ * --- LÓGICA DE INTERACCIÓN Y FORMULARIO ---
+ */
+
+// 1. Desplazamiento suave y pre-llenado del formulario
+function irAFormulario(servicio) {
+    const seccionContacto = document.getElementById('contactarnos');
+    const inputMensaje = document.getElementById('input-mensaje');
+    const inputServicio = document.getElementById('input-servicio');
+
+    // Pre-llenamos el mensaje para ayudar al usuario
+    if(inputMensaje) {
+        inputMensaje.value = `Hola Cable Happy,\nMe interesa una cotización para el servicio: ${servicio}.\n\nMis dudas son:`;
+    }
+    if(inputServicio) {
+        inputServicio.value = servicio;
+    }
+
+    // Scroll hacia el formulario
+    if(seccionContacto) {
+        seccionContacto.scrollIntoView({ behavior: 'smooth' });
+        // Ponemos el foco en el nombre para empezar a escribir
+        setTimeout(() => {
+            const campoNombre = document.getElementById('input-nombre');
+            if(campoNombre) campoNombre.focus();
+        }, 800);
     }
 }
 
-// --- LÓGICA WEBMAIL (ABRIR NAVEGADOR) ---
+// 2. Manejo del envío del formulario (Preparar Correo)
+function activarFormulario() {
+    const form = document.getElementById('form-contacto');
+    
+    if(form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Evitamos recarga de página
 
-function pedirDatosYCotizar(servicio) {
-    let nombreUsuario = prompt("1. Escribe tu NOMBRE:");
-    if (!nombreUsuario) return; 
+            // Capturamos los datos escritos
+            const nombre = document.getElementById('input-nombre').value;
+            const correo = document.getElementById('input-email').value;
+            const tel = document.getElementById('input-tel').value;
+            const mensajeUsuario = document.getElementById('input-mensaje').value;
+            const servicio = document.getElementById('input-servicio').value;
 
-    // Convertimos a minúsculas para detectar fácil si es gmail o outlook
-    let correoUsuario = prompt("2. Escribe tu CORREO (Gmail, Outlook, Hotmail):");
-    if (!correoUsuario) return;
-    correoUsuario = correoUsuario.toLowerCase().trim();
-
-    let telefonoUsuario = prompt("3. Tu TELÉFONO (Opcional):");
-    if (!telefonoUsuario) telefonoUsuario = "No especificado";
-
-    abrirWebmail(servicio, nombreUsuario, correoUsuario, telefonoUsuario);
+            // Llamamos a la función que abre el gestor de correo
+            abrirWebmail(servicio, nombre, correo, tel, mensajeUsuario);
+        });
+    }
 }
 
-function abrirWebmail(servicio, nombre, correoCliente, telefono) {
+// 3. Apertura inteligente de Gmail/Outlook/Yahoo
+function abrirWebmail(servicio, nombre, correoCliente, telefono, mensajeUsuario) {
     const emailDestino = db.contacto.email;
     const asunto = `Cotización: ${servicio} - Cliente: ${nombre}`;
     
-    // Texto del mensaje
-    // Usamos encodeURIComponent para que los espacios y saltos de linea funcionen en la URL
-    const mensajeBase = `Hola Cable Happy,
-Me interesa el servicio: ${servicio}.
-
-MIS DATOS:
+    // Construimos el cuerpo del correo
+    const cuerpoFinal = `DATOS DEL CLIENTE:
 Nombre: ${nombre}
 Correo: ${correoCliente}
 Teléfono: ${telefono}
 
-Espero su respuesta.`;
+MENSAJE:
+${mensajeUsuario}`;
 
     let urlFinal = "";
 
-    // DETECCIÓN INTELIGENTE:
+    // Lógica para detectar el dominio del usuario
     if (correoCliente.includes("@gmail.com")) {
-        // Enlace especial para GMAIL WEB
-        urlFinal = `https://mail.google.com/mail/?view=cm&fs=1&to=${emailDestino}&su=${encodeURIComponent(asunto)}&body=${encodeURIComponent(mensajeBase)}`;
+        // Gmail Web
+        urlFinal = `https://mail.google.com/mail/?view=cm&fs=1&to=${emailDestino}&su=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpoFinal)}`;
     } 
     else if (correoCliente.includes("@outlook") || correoCliente.includes("@hotmail") || correoCliente.includes("@live")) {
-        // Enlace especial para OUTLOOK WEB
-        urlFinal = `https://outlook.live.com/mail/0/deeplink/compose?to=${emailDestino}&subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(mensajeBase)}`;
+        // Outlook Web
+        urlFinal = `https://outlook.live.com/mail/0/deeplink/compose?to=${emailDestino}&subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpoFinal)}`;
     } 
     else if (correoCliente.includes("@yahoo")) {
-        // Enlace especial para YAHOO WEB
-        urlFinal = `https://compose.mail.yahoo.com/?to=${emailDestino}&subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(mensajeBase)}`;
+        // Yahoo Mail
+        urlFinal = `https://compose.mail.yahoo.com/?to=${emailDestino}&subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpoFinal)}`;
     }
     else {
-        // Si es un correo empresarial o raro, usamos el método clásico
-        urlFinal = `mailto:${emailDestino}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(mensajeBase)}`;
+        // Default (App de correo de la PC/Celular)
+        urlFinal = `mailto:${emailDestino}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpoFinal)}`;
     }
 
-    // Abrir en una PESTAÑA NUEVA
+    // Abrimos en nueva pestaña
     window.open(urlFinal, '_blank');
 }
 
+/**
+ * --- MENÚ SUPERIOR ---
+ */
+function activarMenuContacto() {
+    const btnMenu = document.getElementById('menu-contactarnos');
+    if (btnMenu) {
+        btnMenu.addEventListener('click', function(e) {
+            e.preventDefault();
+            irAFormulario("Consulta General");
+        });
+    }
+}
+
+// INICIALIZACIÓN
 document.addEventListener('DOMContentLoaded', () => {
     cargarInfoEmpresa();
     cargarServicios();
     cargarContacto();
+    activarMenuContacto();
+    activarFormulario();
 });

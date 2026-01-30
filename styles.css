@@ -113,6 +113,25 @@ h2 {
     justify-content: center;
     gap: 25px;
 }
+
+/* --- LOGO NAVBAR --- */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #ecf0f1;
+}
+
+.logo img {
+    width: 50px;        /* Ajusta el tamaño */
+    height: 50px;
+    border-radius: 50%; /* Hace el círculo */
+    object-fit: cover;  /* Evita que se deforme */
+}
+
+
 /* --- ESTILOS PARA LISTAS (EXCLUYE NAV) --- */
 section ul {
     list-style: none;

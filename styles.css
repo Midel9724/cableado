@@ -113,6 +113,32 @@ h2 {
     justify-content: center;
     gap: 25px;
 }
+/* --- ESTILOS PARA LISTAS --- */
+ul {
+    list-style: none;          /* Quita los puntos por defecto */
+    padding: 0;
+    margin: 20px auto;
+    max-width: 700px;
+    text-align: left;
+}
+
+ul li {
+    background: #f8f9fa;
+    margin-bottom: 10px;
+    padding: 12px 15px;
+    border-radius: 6px;
+    border-left: 5px solid #2c3e50;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    color: #444;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+ul li:hover {
+    background: #eef1f4;
+    transform: translateX(5px);
+}
+
 
 .servicio-card {
     background-color: #fff;
